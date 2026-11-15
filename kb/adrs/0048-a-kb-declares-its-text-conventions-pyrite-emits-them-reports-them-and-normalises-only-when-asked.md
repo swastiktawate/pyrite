@@ -53,10 +53,13 @@ What ADR-0042 does not answer:
 ## Decision
 
 1. **Where.** A KB declares its conventions in `kb.yaml`, in a `text:` block,
-   beside `validation:` and the `exclude:` key decided on 2026-10-14 (#22).
+   beside `validation:`.
    `kb.yaml` is the operator's documented file (principle 7). Pyrite does not
    read `.editorconfig` or `.gitattributes`: they belong to other tools, and
    two sources would need a precedence rule.
+
+   Note: an `exclude:` key for `kb.yaml` was planned in #22 but never
+   implemented, so no such key exists (#1300).
 
    ```yaml
    text:
@@ -86,7 +89,7 @@ What ADR-0042 does not answer:
 5. **Report.** When a convention is declared, `pyrite qa` reports each file
    that breaks it, as a finding per property (`text.line_endings`,
    `text.final_newline`, `text.bom`, `text.trailing_whitespace`).
-   `index health` counts the files. Excluded files are skipped.
+   `index health` counts the files.
 
 6. **Repair only when asked.** A `pyrite qa fix` rule for the `text.*`
    findings (its dry run lists the files and the properties it would change)
@@ -98,8 +101,7 @@ What ADR-0042 does not answer:
 ## Questions for the maintainer
 
 - **Q1. kb.yaml or .editorconfig?** **Decided: kb.yaml only.** Recommendation was kb.yaml only. It is where
-  the operator already configures this KB, and `exclude:` set the precedent on
-  2026-10-14. Counter-case: `.editorconfig` is already read by every editor,
+  the operator already configures this KB. Counter-case: `.editorconfig` is already read by every editor,
   so a hand-editor's own tools would enforce the same convention for free.
   Pyrite could read it later as a default for an undeclared `text:` block
   without changing this decision.
